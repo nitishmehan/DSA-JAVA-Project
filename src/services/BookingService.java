@@ -147,6 +147,67 @@ public class BookingService {
         printBookingTableFooter();
     }
 
+    public void bookTicketMenu(String username) {
+        int trainNumber = utils.InputHelper.getIntInput("Enter train number: ");
+        models.Train train = trainService.viewTrain(trainNumber);
+        if (train == null) {
+            System.out.println("Train not found.");
+            return;
+        }
+        models.Passenger passenger = passengerService.getPassengerById(username);
+        if (passenger == null) {
+            System.out.println("Passenger profile not found. Please ask admin to register you as a passenger.");
+            return;
+        }
+        bookTicket(train, passenger);
+    }
+
+    public void cancelBookingMenu(String username) {
+        boolean found = false;
+        for (Booking b : bookings) {
+            if (b.getPassenger().getPassengerId().equals(username)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No bookings to cancel.");
+            return;
+        }
+        System.out.println("--- Your Bookings ---");
+        printBookingTableHeader();
+        for (Booking b : bookings) {
+            if (b.getPassenger().getPassengerId().equals(username)) {
+                printBookingRow(b);
+            }
+        }
+        printBookingTableFooter();
+        String bookingId = utils.InputHelper.getStringInput("Enter Booking ID to cancel: ");
+        cancelBookingById(bookingId);
+    }
+
+    public void viewUserBookingsMenu(String username) {
+        boolean found = false;
+        for (Booking b : bookings) {
+            if (b.getPassenger().getPassengerId().equals(username)) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("No bookings found.");
+            return;
+        }
+        System.out.println("--- Your Bookings ---");
+        printBookingTableHeader();
+        for (Booking b : bookings) {
+            if (b.getPassenger().getPassengerId().equals(username)) {
+                printBookingRow(b);
+            }
+        }
+        printBookingTableFooter();
+    }
+
     private void printBookingTableHeader() {
         System.out.println("+-----------+------------+------------+---------------------+");
         System.out.printf("| %-9s | %-10s | %-10s | %-19s |\n", "BookingID", "Train No.", "Passenger", "Train Name");
