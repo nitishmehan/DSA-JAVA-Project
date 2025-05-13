@@ -4,6 +4,7 @@ import models.Booking;
 import models.Passenger;
 import models.Train;
 import dsa.PassengerQueue;
+import dsa.PassengerQueue.PassengerTrainPair;
 import utils.InputHelper;
 
 import java.util.ArrayList;
@@ -26,11 +27,11 @@ public class BookingService {
         if (train.bookTicket()) {
             Booking booking = new Booking(train, passenger);
             bookings.add(booking);
-            System.out.println("Booking successful! Booking ID: " + booking.getBookingId());
+            System.out.println("\nBooking successful! Booking ID: " + booking.getBookingId());
             return true;
         } else {
-            waitlist.enqueue(passenger);
-            System.out.println("No available seats. Passenger added to waitlist.");
+            waitlist.enqueue(passenger, train.getTrainNumber()); // Pass train number to queue
+            System.out.println("\nNo available seats. Passenger added to waitlist for train number " + train.getTrainNumber() + ".");
             return false;
         }
     }
@@ -48,12 +49,17 @@ public class BookingService {
             Train train = bookingToRemove.getTrain();
             train.cancelTicket();
             if (!waitlist.isEmpty()) {
-                Passenger nextPassenger = waitlist.dequeue();
-                bookTicket(train, nextPassenger);
+                PassengerTrainPair next = waitlist.dequeue();
+                if (next != null && next.trainNumber == train.getTrainNumber()) {
+                    bookTicket(train, next.passenger);
+                } else if (next != null) {
+                    // If not matching train, re-enqueue for their train
+                    waitlist.enqueue(next.passenger, next.trainNumber);
+                }
             }
-            System.out.println("Booking cancelled.");
+            System.out.println("\nBooking cancelled.");
         } else {
-            System.out.println("Booking not found.");
+            System.out.println("\nBooking not found.");
         }
     }
 
@@ -62,13 +68,14 @@ public class BookingService {
     }
 
     public void displayWaitlist() {
+        System.out.println();
         if (waitlist.isEmpty()) {
             System.out.println("Waitlist is empty.");
             return;
         }
         System.out.println("--- Waitlist ---");
         printWaitlistTableHeader();
-        waitlist.forEach(this::printWaitlistRow);
+        waitlist.forEach((passenger, trainNumber) -> printWaitlistRow(passenger, trainNumber));
         printWaitlistTableFooter();
     }
 
@@ -82,6 +89,7 @@ public class BookingService {
             System.out.println("4. View Waitlist");
             System.out.println("0. Back to Main Menu");
             choice = InputHelper.getIntInput("Enter your choice: ");
+            System.out.println();
             switch (choice) {
                 case 1:
                     bookTicketMenu();
@@ -98,28 +106,30 @@ public class BookingService {
                 case 0:
                     break;
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
             }
         } while (choice != 0);
     }
 
     private void bookTicketMenu() {
+        System.out.println();
         int trainNumber = InputHelper.getIntInput("Enter train number: ");
         Train train = trainService.viewTrain(trainNumber);
         if (train == null) {
-            System.out.println("Train not found.");
+            System.out.println("\nTrain not found.");
             return;
         }
         String passengerId = InputHelper.getStringInput("Enter passenger ID: ");
         Passenger passenger = passengerService.getPassengerById(passengerId);
         if (passenger == null) {
-            System.out.println("Passenger not found.");
+            System.out.println("\nPassenger not found.");
             return;
         }
         bookTicket(train, passenger);
     }
 
     private void cancelBookingMenu() {
+        System.out.println();
         if (bookings.isEmpty()) {
             System.out.println("No bookings to cancel.");
             return;
@@ -135,6 +145,7 @@ public class BookingService {
     }
 
     private void viewAllBookingsMenu() {
+        System.out.println();
         if (bookings.isEmpty()) {
             System.out.println("No bookings found.");
             return;
@@ -148,21 +159,23 @@ public class BookingService {
     }
 
     public void bookTicketMenu(String username) {
+        System.out.println();
         int trainNumber = utils.InputHelper.getIntInput("Enter train number: ");
         models.Train train = trainService.viewTrain(trainNumber);
         if (train == null) {
-            System.out.println("Train not found.");
+            System.out.println("\nTrain not found.");
             return;
         }
         models.Passenger passenger = passengerService.getPassengerById(username);
         if (passenger == null) {
-            System.out.println("Passenger profile not found. Please ask admin to register you as a passenger.");
+            System.out.println("\nPassenger profile not found. Please ask admin to register you as a passenger.");
             return;
         }
         bookTicket(train, passenger);
     }
 
     public void cancelBookingMenu(String username) {
+        System.out.println();
         boolean found = false;
         for (Booking b : bookings) {
             if (b.getPassenger().getPassengerId().equals(username)) {
@@ -187,6 +200,7 @@ public class BookingService {
     }
 
     public void viewUserBookingsMenu(String username) {
+        System.out.println();
         boolean found = false;
         for (Booking b : bookings) {
             if (b.getPassenger().getPassengerId().equals(username)) {
@@ -227,20 +241,21 @@ public class BookingService {
     }
 
     private void printWaitlistTableHeader() {
-        System.out.println("+------------+---------------------+-----+--------------------------+");
-        System.out.printf("| %-10s | %-19s | %-3s | %-24s |\n", "PassengerID", "Name", "Age", "Contact Info");
-        System.out.println("+------------+---------------------+-----+--------------------------+");
+        System.out.println("+------------+---------------------+-----+--------------------------+------------+");
+        System.out.printf("| %-10s | %-19s | %-3s | %-24s | %-10s |\n", "PassengerID", "Name", "Age", "Contact Info", "Train No.");
+        System.out.println("+------------+---------------------+-----+--------------------------+------------+");
     }
 
-    private void printWaitlistRow(models.Passenger passenger) {
-        System.out.printf("| %-10s | %-19s | %-3d | %-24s |\n",
+    private void printWaitlistRow(models.Passenger passenger, int trainNumber) {
+        System.out.printf("| %-10s | %-19s | %-3d | %-24s | %-10d |\n",
             passenger.getPassengerId(),
             passenger.getName(),
             passenger.getAge(),
-            passenger.getContactInfo());
+            passenger.getContactInfo(),
+            trainNumber);
     }
 
     private void printWaitlistTableFooter() {
-        System.out.println("+------------+---------------------+-----+--------------------------+");
+        System.out.println("+------------+---------------------+-----+--------------------------+------------+");
     }
 }

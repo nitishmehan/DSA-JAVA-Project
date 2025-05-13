@@ -1,4 +1,4 @@
-# Railway Booking Management System
+# RailConnect
 
 ## Overview
 The Railway Booking Management System is a console-based Java application designed to manage train operations, passenger registrations, and ticket bookings. This project demonstrates the application of key data structures and algorithms, including linked lists, binary search trees, queues, and sorting algorithms.
@@ -23,3 +23,8 @@ The Railway Booking Management System is a console-based Java application design
 
 ## Conclusion
 This Railway Booking Management System serves as a practical application of Java programming and data structure concepts, providing a comprehensive solution for managing railway operations.
+
+## Made By
+Nitish
+Naman
+Sarthak

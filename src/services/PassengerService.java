@@ -16,6 +16,7 @@ public class PassengerService {
     }
 
     public void viewPassengers() {
+        System.out.println();
         if (passengerList.isEmpty()) {
             System.out.println("No passengers registered.");
             return;
@@ -49,9 +50,9 @@ public class PassengerService {
             passenger.setName(updatedPassenger.getName());
             passenger.setAge(updatedPassenger.getAge());
             passenger.setContactInfo(updatedPassenger.getContactInfo());
-            System.out.println("Passenger updated successfully.");
+            System.out.println("\nPassenger updated successfully.");
         } else {
-            System.out.println("Passenger not found.");
+            System.out.println("\nPassenger not found.");
         }
     }
 
@@ -59,9 +60,9 @@ public class PassengerService {
         Passenger passenger = findPassengerById(passengerId);
         if (passenger != null) {
             passengerList.remove(passenger);
-            System.out.println("Passenger removed successfully.");
+            System.out.println("\nPassenger removed successfully.");
         } else {
-            System.out.println("Passenger not found.");
+            System.out.println("\nPassenger not found.");
         }
     }
 
@@ -89,6 +90,7 @@ public class PassengerService {
             System.out.println("4. Remove Passenger");
             System.out.println("0. Back to Main Menu");
             choice = InputHelper.getIntInput("Enter your choice: ");
+            System.out.println();
             switch (choice) {
                 case 1:
                     registerPassengerMenu();
@@ -105,26 +107,28 @@ public class PassengerService {
                 case 0:
                     break;
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
             }
         } while (choice != 0);
     }
 
     private void registerPassengerMenu() {
+        System.out.println();
         String passengerId = InputHelper.getStringInput("Enter passenger ID: ");
         String name = InputHelper.getStringInput("Enter name: ");
         int age = InputHelper.getIntInput("Enter age: ");
         String contactInfo = InputHelper.getStringInput("Enter contact info: ");
         Passenger passenger = new Passenger(passengerId, name, age, contactInfo);
         registerPassenger(passenger);
-        System.out.println("Passenger registered successfully.");
+        System.out.println("\nPassenger registered successfully.");
     }
 
     private void editPassengerMenu() {
+        System.out.println();
         String passengerId = InputHelper.getStringInput("Enter passenger ID to edit: ");
         Passenger passenger = findPassengerById(passengerId);
         if (passenger == null) {
-            System.out.println("Passenger not found.");
+            System.out.println("\nPassenger not found.");
             return;
         }
         String name = InputHelper.getStringInput("Enter new name: ");
@@ -135,6 +139,7 @@ public class PassengerService {
     }
 
     private void removePassengerMenu() {
+        System.out.println();
         String passengerId = InputHelper.getStringInput("Enter passenger ID to remove: ");
         removePassenger(passengerId);
     }

@@ -63,19 +63,27 @@ class RailwayBookingSystem {
         do {
             displayMenu();
             choice = InputHelper.getIntInput("Enter your choice: ");
-            handleUserChoice(choice);
+            System.out.println();
+            if (choice == -1) break; // Defensive: allow breaking on error
+            if (handleUserChoice(choice)) {
+                // If logout, restart login/signup
+                loginOrSignup();
+            }
         } while (choice != 0);
     }
 
     private void loginOrSignup() {
         while (true) {
+            System.out.println();
             System.out.println("Welcome to Railway Booking Management System");
             System.out.println("1. Login");
             System.out.println("2. Signup");
             int option = InputHelper.getIntInput("Enter your choice: ");
+            System.out.println();
             if (option == 1) {
                 String username = InputHelper.getStringInput("Username: ");
                 String password = InputHelper.getStringInput("Password: ");
+                System.out.println();
                 User user = userService.login(username, password);
                 if (user != null) {
                     currentUser = user;
@@ -87,6 +95,7 @@ class RailwayBookingSystem {
             } else if (option == 2) {
                 String username = InputHelper.getStringInput("Choose username: ");
                 String password = InputHelper.getStringInput("Choose password: ");
+                System.out.println();
                 // Always assign "user" role, do not ask for role
                 if (username.equalsIgnoreCase("admin")) {
                     System.out.println("Cannot signup as admin.");
@@ -94,7 +103,12 @@ class RailwayBookingSystem {
                 }
                 boolean success = userService.signup(username, password, "user");
                 if (success) {
-                    System.out.println("Signup successful! Please login.");
+                    // Prompt for passenger details and register passenger profile
+                    String name = InputHelper.getStringInput("Enter your name: ");
+                    int age = InputHelper.getIntInput("Enter your age: ");
+                    String contact = InputHelper.getStringInput("Enter your contact info: ");
+                    passengerService.registerPassenger(new models.Passenger(username, name, age, contact));
+                    System.out.println("\nSignup successful! Please login.");
                 } else {
                     System.out.println("Username already exists.");
                 }
@@ -105,22 +119,29 @@ class RailwayBookingSystem {
     }
 
     private void displayMenu() {
+        System.out.println();
         System.out.println("Railway Booking Management System");
         if (currentUser.getRole().equals("admin")) {
             System.out.println("1. Manage Trains");
             System.out.println("2. Manage Passengers");
             System.out.println("3. Manage Bookings");
+            System.out.println("4. Logout");
             System.out.println("0. Exit");
         } else {
             System.out.println("1. Book Ticket");
             System.out.println("2. Cancel Booking");
             System.out.println("3. View My Bookings");
             System.out.println("4. View Waitlist");
+            System.out.println("5. View All Trains");
+            System.out.println("6. Find Train By Name");
+            System.out.println("7. Display Trains Sorted By");
+            System.out.println("8. Logout");
             System.out.println("0. Exit");
         }
     }
 
-    private void handleUserChoice(int choice) {
+    // Returns true if user logged out, false otherwise
+    private boolean handleUserChoice(int choice) {
         if (currentUser.getRole().equals("admin")) {
             switch (choice) {
                 case 1:
@@ -132,11 +153,14 @@ class RailwayBookingSystem {
                 case 3:
                     bookingService.manageBookings();
                     break;
+                case 4:
+                    logout();
+                    return true;
                 case 0:
-                    System.out.println("Exiting the system. Thank you!");
+                    System.out.println("\nExiting the system. Thank you!");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\nInvalid choice. Please try again.");
             }
         } else {
             switch (choice) {
@@ -152,12 +176,30 @@ class RailwayBookingSystem {
                 case 4:
                     bookingService.displayWaitlist();
                     break;
+                case 5:
+                    trainService.viewAllTrainsMenu();
+                    break;
+                case 6:
+                    trainService.findTrainByNameMenu();
+                    break;
+                case 7:
+                    trainService.displayTrainsSortedMenu();
+                    break;
+                case 8:
+                    logout();
+                    return true;
                 case 0:
-                    System.out.println("Exiting the system. Thank you!");
+                    System.out.println("\nExiting the system. Thank you!");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\nInvalid choice. Please try again.");
             }
         }
+        return false;
+    }
+
+    private void logout() {
+        System.out.println("\nLogged out successfully.");
+        currentUser = null;
     }
 }

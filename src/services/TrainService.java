@@ -63,6 +63,7 @@ public class TrainService {
             System.out.println("6. Find Train By Name (BST)");
             System.out.println("0. Back to Main Menu");
             choice = InputHelper.getIntInput("Enter your choice: ");
+            System.out.println();
             switch (choice) {
                 case 1:
                     addTrainMenu();
@@ -85,12 +86,13 @@ public class TrainService {
                 case 0:
                     break;
                 default:
-                    System.out.println("Invalid choice.");
+                    System.out.println("\nInvalid choice.");
             }
         } while (choice != 0);
     }
 
     private void addTrainMenu() {
+        System.out.println();
         int trainNumber = InputHelper.getIntInput("Enter train number: ");
         String name = InputHelper.getStringInput("Enter train name: ");
         String route = InputHelper.getStringInput("Enter route: ");
@@ -99,10 +101,11 @@ public class TrainService {
         String departureTime = InputHelper.getStringInput("Enter departure time: ");
         Train train = new Train(trainNumber, name, route, timing, seatCapacity, departureTime);
         addTrain(train);
-        System.out.println("Train added successfully.");
+        System.out.println("\nTrain added successfully.");
     }
 
-    private void viewAllTrainsMenu() {
+    public void viewAllTrainsMenu() {
+        System.out.println();
         if (trainList.isEmpty()) {
             System.out.println("No trains available.");
             return;
@@ -114,10 +117,11 @@ public class TrainService {
     }
 
     private void updateTrainMenu() {
+        System.out.println();
         int trainNumber = InputHelper.getIntInput("Enter train number to update: ");
         Train train = viewTrain(trainNumber);
         if (train == null) {
-            System.out.println("Train not found.");
+            System.out.println("\nTrain not found.");
             return;
         }
         String name = InputHelper.getStringInput("Enter new train name: ");
@@ -126,21 +130,23 @@ public class TrainService {
         int seatCapacity = InputHelper.getIntInput("Enter new seat capacity: ");
         String departureTime = InputHelper.getStringInput("Enter new departure time: ");
         train.updateTrain(name, route, timing, seatCapacity, departureTime);
-        System.out.println("Train updated successfully.");
+        System.out.println("\nTrain updated successfully.");
     }
 
     private void deleteTrainMenu() {
+        System.out.println();
         int trainNumber = InputHelper.getIntInput("Enter train number to delete: ");
         Train train = viewTrain(trainNumber);
         if (train == null) {
-            System.out.println("Train not found.");
+            System.out.println("\nTrain not found.");
             return;
         }
         deleteTrain(trainNumber);
-        System.out.println("Train deleted successfully.");
+        System.out.println("\nTrain deleted successfully.");
     }
 
-    private void displayTrainsSortedMenu() {
+    public void displayTrainsSortedMenu() {
+        System.out.println();
         if (trainList.isEmpty()) {
             System.out.println("No trains available.");
             return;
@@ -158,18 +164,18 @@ public class TrainService {
         switch (sortChoice) {
             case 1:
                 dsa.SortUtils.sortByName(trains);
-                System.out.println("--- Trains Sorted by Name ---");
+                System.out.println("\n--- Trains Sorted by Name ---");
                 break;
             case 2:
                 dsa.SortUtils.sortByRoute(trains);
-                System.out.println("--- Trains Sorted by Route ---");
+                System.out.println("\n--- Trains Sorted by Route ---");
                 break;
             case 3:
                 dsa.SortUtils.bubbleSort(trains);
-                System.out.println("--- Trains Sorted by Departure Time ---");
+                System.out.println("\n--- Trains Sorted by Departure Time ---");
                 break;
             default:
-                System.out.println("Invalid choice.");
+                System.out.println("\nInvalid choice.");
                 return;
         }
         printTrainTableHeader();
@@ -179,7 +185,8 @@ public class TrainService {
         printTrainTableFooter();
     }
 
-    private void findTrainByNameMenu() {
+    public void findTrainByNameMenu() {
+        System.out.println();
         if (trainList.isEmpty()) {
             System.out.println("No trains available.");
             return;
@@ -188,12 +195,12 @@ public class TrainService {
         BST bst = buildBSTFromTrainList();
         models.Train found = bst.searchByName(name);
         if (found != null) {
-            System.out.println("Train found:");
+            System.out.println("\nTrain found:");
             printTrainTableHeader();
             printTrainRow(found);
             printTrainTableFooter();
         } else {
-            System.out.println("Train not found.");
+            System.out.println("\nTrain not found.");
         }
     }
 
