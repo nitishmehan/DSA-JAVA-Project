@@ -20,7 +20,27 @@ public class PassengerService {
             System.out.println("No passengers registered.");
             return;
         }
-        passengerList.forEach(passenger -> System.out.println(passenger));
+        printPassengerTableHeader();
+        passengerList.forEach(this::printPassengerRow);
+        printPassengerTableFooter();
+    }
+
+    private void printPassengerTableHeader() {
+        System.out.println("+------------+---------------------+-----+--------------------------+");
+        System.out.printf("| %-10s | %-19s | %-3s | %-24s |\n", "PassengerID", "Name", "Age", "Contact Info");
+        System.out.println("+------------+---------------------+-----+--------------------------+");
+    }
+
+    private void printPassengerRow(models.Passenger passenger) {
+        System.out.printf("| %-10s | %-19s | %-3d | %-24s |\n",
+            passenger.getPassengerId(),
+            passenger.getName(),
+            passenger.getAge(),
+            passenger.getContactInfo());
+    }
+
+    private void printPassengerTableFooter() {
+        System.out.println("+------------+---------------------+-----+--------------------------+");
     }
 
     public void editPassenger(String passengerId, Passenger updatedPassenger) {

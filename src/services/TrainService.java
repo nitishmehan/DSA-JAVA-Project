@@ -58,6 +58,7 @@ public class TrainService {
             System.out.println("2. View All Trains");
             System.out.println("3. Update Train");
             System.out.println("4. Delete Train");
+            System.out.println("5. Display Trains Sorted By"); // New menu option
             System.out.println("0. Back to Main Menu");
             choice = InputHelper.getIntInput("Enter your choice: ");
             switch (choice) {
@@ -72,6 +73,9 @@ public class TrainService {
                     break;
                 case 4:
                     deleteTrainMenu();
+                    break;
+                case 5:
+                    displayTrainsSortedMenu();
                     break;
                 case 0:
                     break;
@@ -99,7 +103,9 @@ public class TrainService {
             return;
         }
         System.out.println("--- All Trains ---");
-        trainList.forEach(train -> System.out.println(train));
+        printTrainTableHeader();
+        trainList.forEach(this::printTrainRow);
+        printTrainTableFooter();
     }
 
     private void updateTrainMenu() {
@@ -127,5 +133,67 @@ public class TrainService {
         }
         deleteTrain(trainNumber);
         System.out.println("Train deleted successfully.");
+    }
+
+    private void displayTrainsSortedMenu() {
+        if (trainList.isEmpty()) {
+            System.out.println("No trains available.");
+            return;
+        }
+        System.out.println("--- Display Trains Sorted By ---");
+        System.out.println("1. Name");
+        System.out.println("2. Route");
+        System.out.println("3. Departure Time");
+        int sortChoice = InputHelper.getIntInput("Enter your choice: ");
+        // Convert linked list to array
+        int n = trainList.size();
+        models.Train[] trains = new models.Train[n];
+        for (int i = 0; i < n; i++) {
+            trains[i] = trainList.get(i);
+        }
+        switch (sortChoice) {
+            case 1:
+                dsa.SortUtils.sortByName(trains);
+                System.out.println("--- Trains Sorted by Name ---");
+                break;
+            case 2:
+                dsa.SortUtils.sortByRoute(trains);
+                System.out.println("--- Trains Sorted by Route ---");
+                break;
+            case 3:
+                dsa.SortUtils.bubbleSort(trains);
+                System.out.println("--- Trains Sorted by Departure Time ---");
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                return;
+        }
+        printTrainTableHeader();
+        for (models.Train train : trains) {
+            printTrainRow(train);
+        }
+        printTrainTableFooter();
+    }
+
+    private void printTrainTableHeader() {
+        System.out.println("+----------+---------------------+---------------------+----------+--------------+----------------+");
+        System.out.printf("| %-8s | %-19s | %-19s | %-8s | %-12s | %-14s |\n", 
+            "Number", "Name", "Route", "Timing", "Seats (A/T)", "Departure");
+        System.out.println("+----------+---------------------+---------------------+----------+--------------+----------------+");
+    }
+
+    private void printTrainRow(models.Train train) {
+        System.out.printf("| %-8d | %-19s | %-19s | %-8s | %4d/%-7d | %-14s |\n",
+            train.getTrainNumber(),
+            train.getName(),
+            train.getRoute(),
+            train.getTiming(),
+            train.getAvailableSeats(),
+            train.getSeatCapacity(),
+            train.getDepartureTime());
+    }
+
+    private void printTrainTableFooter() {
+        System.out.println("+----------+---------------------+---------------------+----------+--------------+----------------+");
     }
 }

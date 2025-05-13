@@ -67,4 +67,12 @@ public class PassengerQueue {
             current = current.next;
         }
     }
+
+    public void forEach(java.util.function.Consumer<Passenger> action) {
+        Node current = front;
+        while (current != null) {
+            action.accept(current.data);
+            current = current.next;
+        }
+    }
 }

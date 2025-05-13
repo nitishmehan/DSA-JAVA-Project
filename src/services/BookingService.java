@@ -62,7 +62,14 @@ public class BookingService {
     }
 
     public void displayWaitlist() {
-        waitlist.display();
+        if (waitlist.isEmpty()) {
+            System.out.println("Waitlist is empty.");
+            return;
+        }
+        System.out.println("--- Waitlist ---");
+        printWaitlistTableHeader();
+        waitlist.forEach(this::printWaitlistRow);
+        printWaitlistTableFooter();
     }
 
     public void manageBookings() {
@@ -118,9 +125,11 @@ public class BookingService {
             return;
         }
         System.out.println("--- All Bookings ---");
+        printBookingTableHeader();
         for (Booking b : bookings) {
-            System.out.println("Booking ID: " + b.getBookingId() + ", Train: " + b.getTrain().getTrainNumber() + ", Passenger: " + b.getPassenger().getPassengerId());
+            printBookingRow(b);
         }
+        printBookingTableFooter();
         String bookingId = InputHelper.getStringInput("Enter Booking ID to cancel: ");
         cancelBookingById(bookingId);
     }
@@ -131,8 +140,46 @@ public class BookingService {
             return;
         }
         System.out.println("--- All Bookings ---");
+        printBookingTableHeader();
         for (Booking b : bookings) {
-            System.out.println("Booking ID: " + b.getBookingId() + ", Train: " + b.getTrain().getTrainNumber() + ", Passenger: " + b.getPassenger().getPassengerId());
+            printBookingRow(b);
         }
+        printBookingTableFooter();
+    }
+
+    private void printBookingTableHeader() {
+        System.out.println("+-----------+------------+------------+---------------------+");
+        System.out.printf("| %-9s | %-10s | %-10s | %-19s |\n", "BookingID", "Train No.", "Passenger", "Train Name");
+        System.out.println("+-----------+------------+------------+---------------------+");
+    }
+
+    private void printBookingRow(models.Booking b) {
+        System.out.printf("| %-9s | %-10d | %-10s | %-19s |\n",
+            b.getBookingId(),
+            b.getTrain().getTrainNumber(),
+            b.getPassenger().getPassengerId(),
+            b.getTrain().getName());
+    }
+
+    private void printBookingTableFooter() {
+        System.out.println("+-----------+------------+------------+---------------------+");
+    }
+
+    private void printWaitlistTableHeader() {
+        System.out.println("+------------+---------------------+-----+--------------------------+");
+        System.out.printf("| %-10s | %-19s | %-3s | %-24s |\n", "PassengerID", "Name", "Age", "Contact Info");
+        System.out.println("+------------+---------------------+-----+--------------------------+");
+    }
+
+    private void printWaitlistRow(models.Passenger passenger) {
+        System.out.printf("| %-10s | %-19s | %-3d | %-24s |\n",
+            passenger.getPassengerId(),
+            passenger.getName(),
+            passenger.getAge(),
+            passenger.getContactInfo());
+    }
+
+    private void printWaitlistTableFooter() {
+        System.out.println("+------------+---------------------+-----+--------------------------+");
     }
 }

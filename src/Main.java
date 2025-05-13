@@ -19,6 +19,24 @@ class RailwayBookingSystem {
         trainService = new TrainService();
         passengerService = new PassengerService();
         bookingService = new BookingService(trainService, passengerService);
+        addDummyTrains();
+        addDummyPassengers();
+    }
+
+    private void addDummyTrains() {
+        trainService.addTrain(new models.Train(101, "Shatabdi Express", "Delhi-Mumbai", "08:00", 2, "08:00"));
+        trainService.addTrain(new models.Train(102, "Rajdhani Express", "Delhi-Kolkata", "09:30", 120, "09:30"));
+        trainService.addTrain(new models.Train(103, "Duronto Express", "Mumbai-Chennai", "10:15", 90, "10:15"));
+        trainService.addTrain(new models.Train(104, "Garib Rath", "Delhi-Jaipur", "11:00", 80, "11:00"));
+        trainService.addTrain(new models.Train(105, "Jan Shatabdi", "Kolkata-Patna", "12:45", 110, "12:45"));
+    }
+
+    private void addDummyPassengers() {
+        passengerService.registerPassenger(new models.Passenger("P001", "Alice", 28, "alice@example.com"));
+        passengerService.registerPassenger(new models.Passenger("P002", "Bob", 35, "bob@example.com"));
+        passengerService.registerPassenger(new models.Passenger("P003", "Charlie", 22, "charlie@example.com"));
+        passengerService.registerPassenger(new models.Passenger("P004", "Diana", 30, "diana@example.com"));
+        passengerService.registerPassenger(new models.Passenger("P005", "Eve", 40, "eve@example.com"));
     }
 
     public void start() {

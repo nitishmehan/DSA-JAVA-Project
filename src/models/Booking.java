@@ -1,14 +1,13 @@
 package models;
 
-import java.util.UUID;
-
 public class Booking {
+    private static int bookingCounter = 1; // Global counter for booking IDs
     private String bookingId;
     private Train train;
     private Passenger passenger;
 
     public Booking(Train train, Passenger passenger) {
-        this.bookingId = UUID.randomUUID().toString();
+        this.bookingId = String.valueOf(bookingCounter++);
         this.train = train;
         this.passenger = passenger;
     }
