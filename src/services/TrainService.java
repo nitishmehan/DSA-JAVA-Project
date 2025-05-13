@@ -3,6 +3,7 @@ package services;
 import models.Train;
 import dsa.TrainLinkedList;
 import utils.InputHelper;
+import dsa.BST;
 
 public class TrainService {
     private TrainLinkedList trainList;
@@ -58,7 +59,8 @@ public class TrainService {
             System.out.println("2. View All Trains");
             System.out.println("3. Update Train");
             System.out.println("4. Delete Train");
-            System.out.println("5. Display Trains Sorted By"); // New menu option
+            System.out.println("5. Display Trains Sorted By");
+            System.out.println("6. Find Train By Name (BST)");
             System.out.println("0. Back to Main Menu");
             choice = InputHelper.getIntInput("Enter your choice: ");
             switch (choice) {
@@ -76,6 +78,9 @@ public class TrainService {
                     break;
                 case 5:
                     displayTrainsSortedMenu();
+                    break;
+                case 6:
+                    findTrainByNameMenu();
                     break;
                 case 0:
                     break;
@@ -145,7 +150,6 @@ public class TrainService {
         System.out.println("2. Route");
         System.out.println("3. Departure Time");
         int sortChoice = InputHelper.getIntInput("Enter your choice: ");
-        // Convert linked list to array
         int n = trainList.size();
         models.Train[] trains = new models.Train[n];
         for (int i = 0; i < n; i++) {
@@ -173,6 +177,32 @@ public class TrainService {
             printTrainRow(train);
         }
         printTrainTableFooter();
+    }
+
+    private void findTrainByNameMenu() {
+        if (trainList.isEmpty()) {
+            System.out.println("No trains available.");
+            return;
+        }
+        String name = InputHelper.getStringInput("Enter train name to search: ");
+        BST bst = buildBSTFromTrainList();
+        models.Train found = bst.searchByName(name);
+        if (found != null) {
+            System.out.println("Train found:");
+            printTrainTableHeader();
+            printTrainRow(found);
+            printTrainTableFooter();
+        } else {
+            System.out.println("Train not found.");
+        }
+    }
+
+    private BST buildBSTFromTrainList() {
+        BST bst = new BST();
+        for (int i = 0; i < trainList.size(); i++) {
+            bst.insert(trainList.get(i));
+        }
+        return bst;
     }
 
     private void printTrainTableHeader() {
