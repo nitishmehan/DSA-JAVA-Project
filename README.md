@@ -10,35 +10,11 @@ The Railway Booking Management System is a console-based Java application design
 - **Search Functionality**: Efficiently find trains by number or name using a binary search tree.
 - **Sorting Algorithms**: Sort and display trains by departure time, name, or route using custom sorting implementations.
 
-## Project Structure
-```
-RailwayBookingManagementSystem
-├── src
-│   ├── Main.java
-│   ├── models
-│   │   ├── Train.java
-│   │   ├── Passenger.java
-│   │   └── Booking.java
-│   ├── dsa
-│   │   ├── LinkedList.java
-│   │   ├── Queue.java
-│   │   ├── BST.java
-│   │   └── SortUtils.java
-│   ├── services
-│   │   ├── TrainService.java
-│   │   ├── PassengerService.java
-│   │   └── BookingService.java
-│   └── utils
-│       └── InputHelper.java
-├── README.md
-```
+
 
 ## Setup Instructions
-1. Clone the repository or download the project files.
-2. Open the project in your preferred Java IDE.
-3. Ensure you have Java Development Kit (JDK) installed on your machine.
-4. Compile the Java files in the `src` directory.
-5. Run the `Main.java` file to start the application.
+1. javac */*.java *.java in src dir.
+2. java Main
 
 ## Usage Guidelines
 - Follow the on-screen menu to navigate through the system.
