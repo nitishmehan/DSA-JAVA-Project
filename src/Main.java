@@ -24,11 +24,14 @@ class RailwayBookingSystem {
     }
 
     private void addDummyTrains() {
-        trainService.addTrain(new models.Train(101, "Shatabdi Express", "Delhi-Mumbai", "08:00", 2, "08:00"));
-        trainService.addTrain(new models.Train(102, "Rajdhani Express", "Delhi-Kolkata", "09:30", 120, "09:30"));
-        trainService.addTrain(new models.Train(103, "Duronto Express", "Mumbai-Chennai", "10:15", 90, "10:15"));
-        trainService.addTrain(new models.Train(104, "Garib Rath", "Delhi-Jaipur", "11:00", 80, "11:00"));
-        trainService.addTrain(new models.Train(105, "Jan Shatabdi", "Kolkata-Patna", "12:45", 110, "12:45"));
+        trainService.addTrain(new models.Train(101, "Shatabdi Express", "Delhi-Punjab", "08:00", 2, "08:00"));
+        trainService.addTrain(new models.Train(102, "Shatabdi Express", "Punjab-Delhi", "08:00", 2, "08:00"));
+        trainService.addTrain(new models.Train(103, "Rajdhani Express", "Delhi-Kolkata", "09:30", 10, "09:30"));
+        trainService.addTrain(new models.Train(104, "Rajdhani Express", "Kolkata-Delhi", "09:30", 10, "09:30"));
+        trainService.addTrain(new models.Train(105, "InterCity Express", "Mumbai-Chennai", "10:15", 4, "10:15"));
+        trainService.addTrain(new models.Train(106, "InterCity Express", "Chennai-Mumbai", "10:15", 4, "10:15"));
+        trainService.addTrain(new models.Train(107, "Jan Shatabdi", "Kolkata-Patna", "12:45", 11, "12:45"));
+        trainService.addTrain(new models.Train(108, "Jan Shatabdi", "Patna-Kolkata", "12:45", 11, "12:45"));
     }
 
     private void addDummyPassengers() {
