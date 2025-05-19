@@ -3,7 +3,7 @@ package models;
 public class User {
     private String username;
     private String password;
-    private String role; // "admin" or "user"
+    private String role;
 
     public User(String username, String password, String role) {
         this.username = username;

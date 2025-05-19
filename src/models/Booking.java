@@ -1,7 +1,7 @@
 package models;
 
 public class Booking {
-    private static int bookingCounter = 1; // Global counter for booking IDs
+    private static int bookingCounter = 1; 
     private String bookingId;
     private Train train;
     private Passenger passenger;

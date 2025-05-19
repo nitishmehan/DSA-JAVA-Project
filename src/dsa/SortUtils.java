@@ -27,7 +27,6 @@ public class SortUtils {
                     minIndex = j;
                 }
             }
-            // Swap trains[i] and trains[minIndex]
             Train temp = trains[minIndex];
             trains[minIndex] = trains[i];
             trains[i] = temp;

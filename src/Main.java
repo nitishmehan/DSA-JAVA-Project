@@ -24,21 +24,7 @@ class RailwayBookingSystem {
         passengerService = new PassengerService();
         bookingService = new BookingService(trainService, passengerService);
         userService = new UserService();
-        addDummyUsers();
-        addDummyTrains();
-        addDummyPassengers();
-    }
 
-    private void addDummyUsers() {
-        // admin is already added by UserService constructor
-        userService.signup("P001", "alice123", "user");
-        userService.signup("P002", "bob123", "user");
-        userService.signup("P003", "charlie123", "user");
-        userService.signup("P004", "diana123", "user");
-        userService.signup("P005", "eve123", "user");
-    }
-
-    private void addDummyTrains() {
         trainService.addTrain(new models.Train(101, "Shatabdi Express", "Delhi-Punjab", "08:00", 2, "08:00"));
         trainService.addTrain(new models.Train(102, "Shatabdi Express", "Punjab-Delhi", "08:00", 2, "08:00"));
         trainService.addTrain(new models.Train(103, "Rajdhani Express", "Delhi-Kolkata", "09:30", 10, "09:30"));
@@ -47,14 +33,10 @@ class RailwayBookingSystem {
         trainService.addTrain(new models.Train(106, "InterCity Express", "Chennai-Mumbai", "10:15", 4, "10:15"));
         trainService.addTrain(new models.Train(107, "Jan Shatabdi", "Kolkata-Patna", "12:45", 11, "12:45"));
         trainService.addTrain(new models.Train(108, "Jan Shatabdi", "Patna-Kolkata", "12:45", 11, "12:45"));
-    }
-
-    private void addDummyPassengers() {
-        passengerService.registerPassenger(new models.Passenger("P001", "Alice", 28, "alice@example.com"));
-        passengerService.registerPassenger(new models.Passenger("P002", "Bob", 35, "bob@example.com"));
-        passengerService.registerPassenger(new models.Passenger("P003", "Charlie", 22, "charlie@example.com"));
-        passengerService.registerPassenger(new models.Passenger("P004", "Diana", 30, "diana@example.com"));
-        passengerService.registerPassenger(new models.Passenger("P005", "Eve", 40, "eve@example.com"));
+        userService.signup("P001", "Nitish123", "user");
+        userService.signup("P002", "Naman123", "user");
+        passengerService.registerPassenger(new models.Passenger("P001", "Nitish", 30, "nitish@example.com"));
+        passengerService.registerPassenger(new models.Passenger("P002", "Naman", 35, "naman@example.com"));
     }
 
     public void start() {
@@ -64,9 +46,8 @@ class RailwayBookingSystem {
             displayMenu();
             choice = InputHelper.getIntInput("Enter your choice: ");
             System.out.println();
-            if (choice == -1) break; // Defensive: allow breaking on error
+            if (choice == -1) break; 
             if (handleUserChoice(choice)) {
-                // If logout, restart login/signup
                 loginOrSignup();
             }
         } while (choice != 0);
@@ -96,14 +77,12 @@ class RailwayBookingSystem {
                 String username = InputHelper.getStringInput("Choose username: ");
                 String password = InputHelper.getStringInput("Choose password: ");
                 System.out.println();
-                // Always assign "user" role, do not ask for role
                 if (username.equalsIgnoreCase("admin")) {
                     System.out.println("Cannot signup as admin.");
                     continue;
                 }
                 boolean success = userService.signup(username, password, "user");
                 if (success) {
-                    // Prompt for passenger details and register passenger profile
                     String name = InputHelper.getStringInput("Enter your name: ");
                     int age = InputHelper.getIntInput("Enter your age: ");
                     String contact = InputHelper.getStringInput("Enter your contact info: ");
@@ -139,8 +118,6 @@ class RailwayBookingSystem {
             System.out.println("0. Exit");
         }
     }
-
-    // Returns true if user logged out, false otherwise
     private boolean handleUserChoice(int choice) {
         if (currentUser.getRole().equals("admin")) {
             switch (choice) {
